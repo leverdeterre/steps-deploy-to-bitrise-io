@@ -25,14 +25,20 @@ func DeployIPA(item deployment.DeployableItem, buildURL, token, notifyUserGroups
 	}
 
 	appTitle, _ := infoPlistData.GetString("CFBundleName")
+	appDisplayNameTitle, _ := infoPlistData.GetString("CFBundleDisplayName")
 	bundleID, _ := infoPlistData.GetString("CFBundleIdentifier")
 	version, _ := infoPlistData.GetString("CFBundleShortVersionString")
 	buildNumber, _ := infoPlistData.GetString("CFBundleVersion")
 	minOSVersion, _ := infoPlistData.GetString("MinimumOSVersion")
 	deviceFamilyList, _ := infoPlistData.GetUInt64Array("UIDeviceFamily")
 
+	bestAppTitle = appTitle
+	if appDisplayNameTitle != nil {
+		bestAppTitle = appDisplayNameTitle
+	}
+
 	appInfo := map[string]interface{}{
-		"app_title":          appTitle,
+		"app_title":          bestAppTitle,
 		"bundle_id":          bundleID,
 		"version":            version,
 		"build_number":       buildNumber,
